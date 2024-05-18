@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import HeaderSlotVue from "../../../components/header/HeaderSlot.vue";
+import HeaderSlot from "../../../components/header/HeaderSlot.vue";
 </script>
 
 <template>
     <div>
-        <HeaderSlotVue>
+        <HeaderSlot>
             <template #left>
                 <ion-icon name="chevron-back-outline"></ion-icon>
             </template>
@@ -14,7 +14,7 @@ import HeaderSlotVue from "../../../components/header/HeaderSlot.vue";
             <template #right>
                 <ion-icon name="ellipsis-horizontal-circle-outline"></ion-icon>
             </template>
-        </HeaderSlotVue>
+        </HeaderSlot>
     </div>
 </template>
 

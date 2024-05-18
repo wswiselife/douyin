@@ -36,7 +36,7 @@ const tab = (num: number) => {
 </script>
 
 <template>
-    <footer class="footer">
+    <div class="footer">
         <div
             class="nav-tab"
             @click="tab(1)"
@@ -51,7 +51,7 @@ const tab = (num: number) => {
         >
             <span>商城</span>
         </div>
-        <div class="nav-tab" @click="tab(3)">
+        <div class="nav-tab" @click="tab()">
             <div class="add-btn">
                 <ion-icon name="add-outline"></ion-icon>
             </div>
@@ -63,7 +63,7 @@ const tab = (num: number) => {
         >
             <div>
                 <span class="message">消息</span>
-                <div class="badge">2</div>
+                <!-- <div class="badge">2</div> -->
             </div>
         </div>
         <div
@@ -73,7 +73,7 @@ const tab = (num: number) => {
         >
             <span>我的</span>
         </div>
-    </footer>
+    </div>
 </template>
 
 <style scoped>
@@ -85,8 +85,12 @@ const tab = (num: number) => {
 }
 
 .footer {
+    /* width 需要处理 */
+    max-width: var(--app-width);
+    width: 100%;
+    height: 100%;
     display: flex;
-    flex-direction: row;
+    /* flex-direction: row; */
     justify-content: space-between;
     align-items: center;
     padding: 1.2rem 1rem;
@@ -95,11 +99,12 @@ const tab = (num: number) => {
     color: var(--white);
     font-weight: 600;
     font-size: 1.4rem;
-    position: fixed;
-    right: 0;
-    left: 0;
+    /* position: fixed; */
+    /* right: 0; */
+    /* left: 0; */
     /* 遮挡问题 */
-    top: calc(80vh - var(--footer-height));
+    /* bottom: 0; */
+    /* top: calc(80vh - var(--footer-height)); */
 }
 
 .nav-tab {
@@ -108,7 +113,7 @@ const tab = (num: number) => {
 }
 
 .add-btn {
-    font-size: 2.6rem;
+    font-size: 2.4rem;
     color: var(--white);
     border: 2px solid #fff;
     margin: 0 25%;
@@ -116,7 +121,7 @@ const tab = (num: number) => {
     display: flex;
     justify-content: center;
     align-content: center;
-    padding: 0.2rem 0;
+    padding: 0.1rem 0rem;
 }
 
 .message {

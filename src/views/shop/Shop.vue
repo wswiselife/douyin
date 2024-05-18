@@ -1,7 +1,24 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Footer from "@/components/footer/Footer.vue";
+</script>
 
 <template>
-    <div>shop</div>
+    <div class="message">
+        <div class="box">待开发中......</div>
+
+        <Footer></Footer>
+    </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.message {
+    width: 100%;
+    /* width: 100vh; */
+    background-color: #fff;
+}
+
+.box {
+    width: 100%;
+    height: calc(100vh - 58px);
+}
+</style>

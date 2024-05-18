@@ -1,9 +1,33 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
+import userApi from "../../api/user";
+import { onMounted, watch } from "vue";
+import Footer from "@/components/footer/Footer.vue";
+import { usePiniaStore } from "@/store/store";
+
 const router = useRouter();
+const pinia = usePiniaStore();
+
+onMounted(() => {
+    getUserinfo();
+    console.log("pinia.showComment--ME", pinia.showComment);
+});
+
+watch(
+    () => pinia.showComment,
+    newVal => {
+        console.log("new", newVal);
+    },
+    { deep: true }
+);
 
 const navigateTo = (url: String) => {
     router.push(url);
+};
+
+const getUserinfo = async () => {
+    const response = await userApi.getUserinfoApi();
+    console.log("response", response);
 };
 </script>
 
@@ -38,6 +62,8 @@ const navigateTo = (url: String) => {
                             class="usermenu-icon"
                         ></ion-icon>
                     </span>
+
+                    <!-- 搜索 -->
                     <span>
                         <!-- <img src="../../assets/icon/menu.png" alt="" /> -->
                         <ion-icon
@@ -45,6 +71,8 @@ const navigateTo = (url: String) => {
                             class="usermenu-icon"
                         ></ion-icon>
                     </span>
+
+                    <!-- 设置 -->
                     <span>
                         <!-- <img src="../../assets/icon/menu.png" alt="" /> -->
                         <ion-icon
@@ -155,7 +183,9 @@ const navigateTo = (url: String) => {
                 <!-- 添加朋友 -->
                 <div class="add-friends">添加朋友</div>
                 <!-- 编辑资料 -->
-                <div class="edit">编辑资料</div>
+                <div class="edit" @click="navigateTo('/me/edit-userinfo')">
+                    编辑资料
+                </div>
             </div>
 
             <!-- 视频 -->
@@ -174,12 +204,21 @@ const navigateTo = (url: String) => {
                 <div class="bottom">暂时没有更多</div>
             </div>
         </div>
+
+        <Footer class="footer"></Footer>
     </div>
 </template>
 
 <style scoped>
 .me {
+    width: 100%;
+    height: 100%;
     position: relative;
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
 
 .background {
@@ -241,6 +280,7 @@ const navigateTo = (url: String) => {
 }
 
 .content {
+    max-width: 420px;
     position: absolute;
     top: 21rem;
     width: 100%;

@@ -21,6 +21,10 @@ const routes:Array<RouteRecordRaw> = [
     {
         path:"/me/visitor",
         component: ()=>import('../views/me/children/Visitor.vue')
+    },
+    {
+        path:"/me/edit-userinfo",
+        component: ()=>import('../views/me/children/EditUserinfo.vue')
     }
 ]
     

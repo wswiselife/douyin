@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo</title>
+  <style>
+    .container {
+      height: 100vh;
+      max-width: 100vw;
+      /* min-width: 1080px; */
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: content-box;
+    }
+
+    .container .player {
+      position: relative;
+      width: 766px;
+      height: 431px;
+      background-color: #000;
+      overflow: hidden;
+    }
+
+    .custom-video {
+      width: 100%;
+      height: 100%;
+    }
+
+    .content {
+      width: 304px;
+      background-color: rgb(47, 218, 218);
+    }
+
+    .ui-wrapper {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+
+    .ui-wrapper .ui-mask {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 1;
+    }
+
+
+
+    .ui-wrapper .ui-control {
+      position: absolute;
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+      bottom: 0px;
+      border-radius: 5px;
+      padding: 12px 0;
+      background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, #000000 100%);
+      z-index: 2;
+      transition: all 0.25s cubic-bezier(0.39, -0.04, 0.09, 0.75);
+    }
+
+    .progress {
+      width: 100%;
+    }
+
+    input[type="range"] {
+      width: 100%;
+    }
+
+    .control-type {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .control-type .left {
+      display: flex;
+      align-self: flex-start;
+      gap: 15px;
+    }
+
+    .timer {
+      color: #FFF;
+    }
+
+    .control-type .right {
+      display: flex;
+      gap: 15px;
+    }
+
+    img[class="control-img"] {
+      width: 24px;
+      height: 24px;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="player">
+      <div class="noticeBar"></div>
+      <video class="custom-video" preload="auto" src="./1.mp4" ondurationchange="handleDurationChange(event)"
+        ontimeupdate="handleUpdateVideo(event)" onwaiting="handleVideoLoading()" onended="handleVideoEnded()"
+        onloadedmetadata="handleVideoCache(event)">
+        您的浏览器不支持video标签。
+      </video>
+      <div class="ui-wrapper">
+        <div class="ui-mask" onclick="handleMaskClick()"></div>
+        <div class="ui-control" onclick="controlShow(2)">
+
+          <div class="progress">
+            <input type="range" min="0" max="100" id="myRange" oninput="onInputProgress(event)">
+          </div>
+          <!-- 控制详情 -->
+          <div class="control-type">
+            <div class="left">
+              <div class="play_pause" onclick="videoPlayOrPause()">
+                <img id="play_pause_img" class="control-img" src="./image/pause.png" alt />
+                <!-- <img class="control-img" src="./image/pause.png" alt /> -->
+              </div>
+              <div class="timer">00:00 / 00:00</div>
+            </div>
+            <div class="right">
+              <!-- <DoubleSpeed ref="doubleSpeedRef" class="ctr-double-speed" @onChageSpeed="onChageSpeed" /> -->
+              <img class="control-img" src="./image/pageFullScreen.png" alt onclick="handleChangeScreen('page')" />
+              <img class="control-img" src="./image/pictureInPictureScreen.png" alt
+                onclick="handleChangeScreen('pictureInPicture')" />
+              <img class="control-img" src="./image/windowFullScreen.png" alt onclick="handleChangeScreen('window')" />
+            </div>
+          </div>
+        </div>
+        <div class="ui-loading">
+        </div>
+      </div>
+    </div>
+    <div class="content">1</div>
+  </div>
+
+  <script>
+    // 参数
+    let duration = 0;
+    let videoPlayState = false;  // 0-暂停 1-播放 2-加载
+
+    let playerNode = document.querySelector(".player");
+    let videoNode = playerNode.querySelector(".custom-video");
+    let timerNode = document.querySelector(".timer");
+    let myRangeNode = document.querySelector("#myRange");
+    let playPauseImgNode = document.querySelector("#play_pause_img");
+
+    function handleMaskClick () {
+      // 处理视频的播放
+      videoPlayOrPause();
+      controlShow(2);
+    }
+
+
+    let controlNode = playerNode.querySelector(".ui-control");
+    let controlTimer = null;
+
+    function controlShow (closeTime = 2.5) {
+      // 点击了，就取消对control的隐藏，重新倒数
+      controlNode.style.transform = `translateY(0)`;
+      clearTimeout(controlTimer);
+      controlTimer = setTimeout(() => {
+        // controlNode.style.transform = `translateY(100%)`;
+        clearTimeout(controlTimer);
+      }, closeTime * 1000);
+    }
+
+
+    // 设计进度条
+    function onInputProgress (event) {
+      // 点击判断修改事件
+      videoNode.currentTime = duration * event.target.value / 100;
+    }
+    // 操作
+    function videoPlayOrPause () {
+      videoNode.paused ? videoNode.play() : videoNode.pause();
+    }
+
+    // 监听视频是否播放
+    videoNode.addEventListener('play', videoPlayedListener)
+    function videoPlayedListener (e) {
+      if (e.returnValue) {
+        videoPlayState = 1;
+        playPauseImgNode.src = "./image/play.png";
+      }
+    }
+
+    videoNode.addEventListener('pause', videoPausedListener);
+    function videoPausedListener (e) {
+      if (e.returnValue) {
+        videoPlayState = 0;
+        playPauseImgNode.src = "./image/pause.png";
+      }
+    }
+
+
+    //. video标签的一些事件
+    function handleDurationChange (event) {
+      // 获取duration的数据
+      const videoElement = event.target;
+      duration = videoElement.duration
+      // 未播放视频的时候，格式化时间
+      formatTimeString(videoElement);
+    }
+
+    function handleUpdateVideo (event) {
+      const videoElement = event.target;
+      formatTimeString(videoElement);
+    }
+
+    function handleVideoCache (event) {
+      // 视频的缓冲进度
+      const buffered = event.target.buffered;
+      let bufferedTime = 0;
+      if (this.bufferedLength !== buffered.length) {
+        for (let i = 0; i < buffered.length; i++) {
+          bufferedTime += buffered.end(i) - buffered.start(i);
+        }
+        console.log(`已缓冲 ${bufferedTime} 秒`);
+        this.bufferedTime = bufferedTime;
+        this.bufferedLength = buffered.length;
+      }
+    }
+    function handleVideoEnded () {
+      console.log("视频播放结束：");
+    }
+    function handleVideoLoading () {
+      // 视频正在加载中动画
+      console.log("视频正在加载");
+    }
+
+    let ispageFullScreen = false;
+    let iswindowFullScreen = false;
+    let prePlayerStyle = {
+      width: "766px",
+      height: "431px"
+    };
+    // 全屏
+    function handleChangeScreen (type) {
+      switch (type) {
+        case "page":
+          ispageFullScreen = handlePageFullScreen(ispageFullScreen);
+          break;
+        case "window":
+          iswindowFullScreen = handlewindowFullScreen(iswindowFullScreen);
+          break;
+        case "pictureInPicture":
+          handlePictureInPicture();
+          break;
+        default:
+          break;
+      }
+    }
+
+    function handleFullScreenStyle (currentIsFull) {
+      if (currentIsFull) {
+        playerNode.style.position = 'fixed';
+        playerNode.style.height = "100vh";
+        playerNode.style.width = "100vw";
+      } else {
+        playerNode.style.position = 'relative';
+        playerNode.style.height = prePlayerStyle.height;
+        playerNode.style.width = prePlayerStyle.width;
+      }
+    }
+    // 页面的全屏
+    function handlePageFullScreen (isFull) {
+      handleFullScreenStyle(!isFull);
+      // 点击了，就切换一下
+      return !isFull;
+    }
+
+    // 页面全屏时，仅仅时element全屏了，不然不能实现video控件的自定义
+    // 获取整个页面元素
+    function handlewindowFullScreen (isFull, isChangeWindow = true) {
+
+      const pageFullScreen = () => {
+        if (playerNode.requestFullscreen) {
+          playerNode.requestFullscreen();
+        } else if (playerNode.mozRequestFullScreen) {
+          playerNode.mozRequestFullScreen();
+        } else if (playerNode.webkitRequestFullscreen) {
+          playerNode.webkitRequestFullscreen();
+        } else if (playerNode.msRequestFullscreen) {
+          playerNode.msRequestFullscreen();
+        }
+        return true;
+      }
+
+      const exitpageFullScreen = () => {
+        if (document.exitFullScreen) {
+          document.exitFullScreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+        return false;
+      }
+
+      return !isFull ? pageFullScreen() : exitpageFullScreen();
+    }
+
+    document.addEventListener('fullscreenchange', function (e) {
+    
+      // 监听document页面是否全屏
+      if (document.fullscreenElement === playerNode) {
+        // 视频进入全屏状态
+        console.log("视频进入全屏状态");
+        // 将页面变成false；
+        ispageFullScreen = false;
+      } else {
+        // 视频退出全屏状态
+        // ispageFullScreen = false;
+        // iswindowFullScreen = false;
+      }
+    });
+    // 画中画的视角
+
+    function handlePictureInPicture (isFull) {
+
+      if (document.pictureInPictureEnabled) {
+        // 浏览器支持画中画功能
+        enterPictureInPicture();
+      } else {
+        // 浏览器不支持画中画功能
+      }
+
+
+      function enterPictureInPicture () {
+        videoNode.requestPictureInPicture()
+          .then(() => {
+            // 进入画中画模式成功
+            console.error('进入画中画模式成功');
+          })
+          .catch(error => {
+            console.error('进入画中画模式失败:', error);
+          });
+      }
+    }
+
+    // 格式化时间
+    function formatTimeString (node) {
+      let currentTime = node.currentTime;
+      myRangeNode.value = currentTime / duration * 100;
+      const formatTime = (t) => {
+        // 时间格式化
+        let h = parseInt(t / 3600);
+        let m = parseInt((t % 3600) / 60);
+        m = h * 60 + m;
+        m = m < 10 ? "0" + m : m;
+        let s = parseInt(t % 60);
+        s = s < 10 ? "0" + s : s;
+        return m + ":" + s;
+      }
+
+      timerNode.innerText = `${formatTime(currentTime)} / ${formatTime(duration)}`
+    }
+  </script>
+</body>
+
+</html>
