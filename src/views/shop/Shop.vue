@@ -1,12 +1,8 @@
-<script setup lang="ts">
-import Footer from "@/components/footer/Footer.vue";
-</script>
+<script setup lang="ts"></script>
 
 <template>
     <div class="message">
         <div class="box">待开发中......</div>
-
-        <Footer></Footer>
     </div>
 </template>
 

@@ -62,8 +62,10 @@ const tab = (num: number) => {
             :class="{ active: currentTab == 'message' }"
         >
             <div>
-                <span class="message">消息</span>
-                <!-- <div class="badge">2</div> -->
+                <span class="message"
+                    >消息
+                    <div class="badge">2</div></span
+                >
             </div>
         </div>
         <div
@@ -80,29 +82,31 @@ const tab = (num: number) => {
 /* @import "../../style.css"; */
 
 .active {
-    font-size: 1.6rem;
+    /* font-size: 1.6rem; */
     font-weight: 700;
 }
 
 .footer {
-    /* width 需要处理 */
-    max-width: var(--app-width);
-    width: 100%;
-    height: 100%;
+    z-index: 999;
     display: flex;
-    /* flex-direction: row; */
     justify-content: space-between;
     align-items: center;
-    padding: 1.2rem 1rem;
+    /* width 需要处理 */
+    /* 2024-05-19 修复 */
+    max-width: var(--app-max-width);
+    width: 100%;
+    height: 100%;
     height: var(--footer-height);
-    background-color: var(--footer-background-color);
-    color: var(--white);
     font-weight: 600;
     font-size: 1.4rem;
+    color: var(--white);
+    background-color: var(--footer-background-color);
+
     /* position: fixed; */
     /* right: 0; */
     /* left: 0; */
     /* 遮挡问题 */
+    /* 遮挡问题只需要在app.vue中设置footer,无需获取手机底部导航的高度-20240519 */
     /* bottom: 0; */
     /* top: calc(80vh - var(--footer-height)); */
 }
@@ -113,25 +117,33 @@ const tab = (num: number) => {
 }
 
 .add-btn {
-    font-size: 2.4rem;
-    color: var(--white);
-    border: 2px solid #fff;
-    margin: 0 25%;
-    border-radius: var(--rounded);
     display: flex;
     justify-content: center;
     align-content: center;
+    margin: 0 25%;
     padding: 0.1rem 0rem;
+    font-size: 2.4rem;
+    color: var(--white);
+    border: 2px solid #fff;
+    border-radius: var(--rounded);
 }
 
 .message {
     position: relative;
+    display: inline-block;
 }
 
 .badge {
     position: absolute;
-    top: 0;
-    right: -0.4rem;
+    top: -8px;
+    right: -16px;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
+    border-radius: 100%;
+    background-color: var(--primary-color);
     /* 相对布局问题 */
+    /* 相对布局要有一个父元素，才可以实现-20240519 */
 }
 </style>

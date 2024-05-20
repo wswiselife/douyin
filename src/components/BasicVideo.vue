@@ -27,9 +27,7 @@ function showProgress() {
     showProgress.value = true;
 }
 
-const offProgress = () => {
-    showProgress.value = false;
-};
+
 
 const isPause = ref<Boolean>(false);
 const mark = () => {

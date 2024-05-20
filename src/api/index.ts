@@ -8,7 +8,9 @@ const axiosInstance:AxiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
     (config)=>{
-        const token = localStorage.getItem('token')
+        // 处理
+        // const token = localStorage.getItem('token')
+        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJhY2NvdW50IjoiamlhbnpoaTEiLCJpYXQiOjE3MTYxODAzMzMsImV4cCI6MTcxNjI2NjczM30.cqa-TqXoXNsKGy9H0w9CXIWCUyd8h2F5xwphAyDFUys'
         config.headers['Authorization'] = 'Bearer ' + token
         if (!config.headers['Content-Type']) {
             config.headers['Content-Type'] = 'application/json'

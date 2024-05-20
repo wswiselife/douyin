@@ -1,10 +1,20 @@
 import request from './index'
 
-const getUserinfoApi = (params?:any,data?:any)=>{
-    return request({url:'/v1/user/getUserinfo',method:"get",params,data})
+const getUserInfoApi = (params?:any,data?:any)=>{
+    return request({url:'/v1/user/getUserInfo',method:"get",params,data})
+}
+
+const updateUserInfoApi = (params?:any,data?:any)=>{
+    return request({
+        url:'/v1/user/updateUserInfo',
+        method:'post',
+        params,
+        data
+    })
 }
 
 
 export default {
-    getUserinfoApi
+    getUserInfoApi,
+    updateUserInfoApi
 }

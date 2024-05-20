@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, watch } from "vue";
+import { watch } from "vue";
 import { usePiniaStore } from "../store/store";
 import { storeToRefs } from "pinia";
 

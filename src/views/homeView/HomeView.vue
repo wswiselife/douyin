@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import BasicVideo from "@/components/BasicVideo.vue";
-import Footer from "@/components/footer/Footer.vue";
 import { storeToRefs } from "pinia";
 import Comment from "../../components/Comment.vue";
 
@@ -8,6 +7,8 @@ import { usePiniaStore } from "@/store/store";
 const piniaStore = usePiniaStore();
 
 const pinia = storeToRefs(piniaStore);
+
+console.log("pinia.$state", pinia.showComment);
 
 const commentHandle = () => {
     console.log("click comment");
@@ -44,7 +45,6 @@ const commentHandle = () => {
                 <Comment></Comment>
             </div>
         </div>
-        <Footer></Footer>
     </div>
 </template>
 
@@ -56,10 +56,9 @@ const commentHandle = () => {
     flex-direction: column;
     /* justify-content: center; */
     align-items: center;
-    // justify-content: center;
-    /* padding: 10px; */
-    // position: relative;
-    background-color: #465540;
+
+    // padding: 10px;
+    background-color: #ca09ba;
 }
 
 .box {
@@ -95,10 +94,4 @@ const commentHandle = () => {
     width: 100%;
     height: 200px;
 }
-
-// .footer {
-//     position: absolute;
-//     bottom: 0;
-//     width: 100%;
-// }
 </style>

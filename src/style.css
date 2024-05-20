@@ -2,11 +2,12 @@
 
 :root {
     /* 需要处理 */
-    --app-width: 42rem;
+    --app-max-width: 480px;
 
     /* color */
     --white: #fff;
     --black: #000;
+    --primary-color: #fc2f56;
 
     /* footer */
     --footer-background-color: #000;
@@ -14,7 +15,7 @@
 
     /* border */
     --border-white: 1px solid #fff;
-    --border-gray: 1px solid #ccc;
+    --border-gray: 1px solid #ddd;
 
     /* border radius */
     --rounded: 0.6rem;
@@ -30,19 +31,23 @@
 }
 
 html {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
     font-size: 62.5%;
     font-family: "Roboto", sans-serif;
-    width: 100%;
-    height: 100%;
+    background-color: rgb(52, 174, 174);
 }
 
 body {
-    font-size: 1.6rem;
-    background-color: #833204;
+    display: flex;
+    justify-content: center;
+    position: relative;
     width: 100%;
+    max-width: var(--app-max-width);
     height: 100%;
-    /* display: flex;
-    justify-content: flex-start;
-    align-items: flex-start; */
-    /* overflow: hidden; */
+    font-size: 1.6rem;
+    background-color: #2f2f2f;
 }

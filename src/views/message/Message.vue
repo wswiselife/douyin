@@ -1,110 +1,101 @@
 <script setup lang="ts">
-import Headers from "../../components/header/Header.vue";
 import HeaderSlot from "../../components/header/HeaderSlot.vue";
-import Footer from "@/components/footer/Footer.vue";
 </script>
 
 <template>
     <div class="message">
         <!-- <Headers fixed leftText="左侧" rightText="求更新"></Headers> -->
-        <div class="c">
-            <HeaderSlot>
-                <template #left>
-                    <ion-icon name="chevron-back-outline"></ion-icon>
-                </template>
-                <template #center>
-                    <ion-icon name="camera-outline"></ion-icon>
-                </template>
-                <template #right>
-                    <ion-icon name="search-outline"></ion-icon>
-                </template>
-            </HeaderSlot>
 
-            <!-- friends -->
-            <div class="friends-content">
-                <div class="friends-avatar">
-                    <img src="../../assets/img/avatar.png" alt="avatar" />
-                    <div class="name">lisi</div>
-                </div>
-                <div class="friends-avatar">
-                    <img src="../../assets/img/avatar.png" alt="avatar" />
-                    <div class="name">王楚</div>
-                </div>
-                <div class="friends-avatar">
-                    <img src="../../assets/img/avatar.png" alt="avatar" />
-                    <div class="name">wijdl</div>
-                </div>
-                <div class="friends-avatar">
-                    <img src="../../assets/img/avatar.png" alt="avatar" />
-                    <div class="name">状态管理</div>
-                </div>
+        <HeaderSlot>
+            <template #left>
+                <ion-icon name="chevron-back-outline"></ion-icon>
+            </template>
+            <template #center>
+                <ion-icon name="camera-outline"></ion-icon>
+            </template>
+            <template #right>
+                <ion-icon name="search-outline"></ion-icon>
+            </template>
+        </HeaderSlot>
+
+        <!-- friends -->
+        <!-- <div class="friends-content">
+            <div class="friends-avatar">
+                <img src="../../assets/img/avatar.png" alt="avatar" />
+                <div class="name">lisi</div>
             </div>
+            <div class="friends-avatar">
+                <img src="../../assets/img/avatar.png" alt="avatar" />
+                <div class="name">王楚</div>
+            </div>
+            <div class="friends-avatar">
+                <img src="../../assets/img/avatar.png" alt="avatar" />
+                <div class="name">wijdl</div>
+            </div>
+            <div class="friends-avatar">
+                <img src="../../assets/img/avatar.png" alt="avatar" />
+                <div class="name">状态管理</div>
+            </div>
+        </div> -->
 
-            <!-- message list -->
-            <div class="message-content">
-                <div class="message-list">
-                    <div class="avatar">
-                        <img src="../../assets/img/avatar.png" alt="" />
-                    </div>
-                    <div class="message-box">
-                        <div>
-                            <div class="title">新朋友</div>
-                            <div class="subTitle">没有新通知</div>
-                        </div>
-                        <div>
-                            <ion-icon name="chevron-forward-outline"></ion-icon>
-                        </div>
-                    </div>
+        <!-- message list -->
+        <div class="message-content">
+            <div class="message-list">
+                <div class="avatar">
+                    <img src="../../assets/img/avatar.png" alt="" />
                 </div>
-
-                <div class="message-list">
-                    <div class="avatar">
-                        <img src="../../assets/img/avatar.png" alt="" />
+                <div class="message-box">
+                    <div>
+                        <div class="title">新朋友</div>
+                        <div class="subTitle">没有新通知</div>
                     </div>
-                    <div class="message-box">
-                        <div>
-                            <div class="title">互动消息</div>
-                            <div class="subTitle">简至 给你的消息点赞</div>
-                        </div>
-                        <div>
-                            <ion-icon name="chevron-forward-outline"></ion-icon>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="message-list">
-                    <div class="avatar">
-                        <img src="../../assets/img/avatar.png" alt="" />
-                    </div>
-                    <div class="message-box">
-                        <div>
-                            <div class="title">和你的朋友建个群聊吧</div>
-                            <div class="subTitle">邀请好友进行聊天</div>
-                        </div>
-                        <div>
-                            <ion-icon name="chevron-forward-outline"></ion-icon>
-                        </div>
+                    <div>
+                        <ion-icon name="chevron-forward-outline"></ion-icon>
                     </div>
                 </div>
             </div>
 
-            <!-- 没有更多 -->
-            <div class="nomore">暂时没有更多了</div>
+            <div class="message-list">
+                <div class="avatar">
+                    <img src="../../assets/img/avatar.png" alt="" />
+                </div>
+                <div class="message-box">
+                    <div>
+                        <div class="title">互动消息</div>
+                        <div class="subTitle">简至 给你的消息点赞</div>
+                    </div>
+                    <div>
+                        <ion-icon name="chevron-forward-outline"></ion-icon>
+                    </div>
+                </div>
+            </div>
+
+            <div class="message-list">
+                <div class="avatar">
+                    <img src="../../assets/img/avatar.png" alt="" />
+                </div>
+                <div class="message-box">
+                    <div>
+                        <div class="title">和你的朋友建个群聊吧</div>
+                        <div class="subTitle">邀请好友进行聊天</div>
+                    </div>
+                    <div>
+                        <ion-icon name="chevron-forward-outline"></ion-icon>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <Footer></Footer>
+        <!-- 没有更多 -->
+        <div class="nomore">暂时没有更多了</div>
     </div>
 </template>
 
 <style scoped>
 .message {
     /* padding-inline: 1.2rem; */
-    /* height: 100%; */
+    height: 100%;
     width: 100%;
-}
-
-.c {
-    height: calc(100vh - 58px);
 }
 
 .friends-content {

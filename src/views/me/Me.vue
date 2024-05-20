@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import userApi from "../../api/user";
-import { onMounted, watch } from "vue";
-import Footer from "@/components/footer/Footer.vue";
+import UserApi from "../../api/user";
+import { onMounted, watch, ref, reactive } from "vue";
 import { usePiniaStore } from "@/store/store";
+
+import UpdateBackground from "./UpdateBackground.vue";
+import { ElMessage } from "element-plus";
 
 const router = useRouter();
 const pinia = usePiniaStore();
 
 onMounted(() => {
     getUserinfo();
-    console.log("pinia.showComment--ME", pinia.showComment);
 });
 
 watch(
@@ -21,13 +22,75 @@ watch(
     { deep: true }
 );
 
-const navigateTo = (url: String) => {
+const navigateTo = (url: string) => {
     router.push(url);
 };
 
+// interface myInfoI {
+//     cover_url: string;
+//     nickname: string;
+// }
+
+const myInfo = reactive({
+    cover_url: "",
+    nickname: "",
+    unique_id: "",
+    signature: "",
+    school: "",
+    province: "",
+    gender: "",
+    country: "",
+    city: "",
+    avatar: "",
+    birthday: "",
+});
 const getUserinfo = async () => {
-    const response = await userApi.getUserinfoApi();
+    const response = await UserApi.getUserInfoApi();
     console.log("response", response);
+    // 持久化处理todo
+    if (response.data.code === 200) {
+        let data = response.data.data.result;
+        // console.log("myInfo", myInfo);
+        // for (let mes in data) {
+        //     console.log(mes);
+        //     myInfo.mes;
+        // }
+        // 待解决-2024-05-19
+        myInfo.cover_url = data.cover_url;
+        myInfo.nickname = data.nickname;
+        myInfo.avatar = data.avatar;
+        myInfo.birthday = data.birthday;
+        myInfo.city = data.city;
+        myInfo.country = data.country;
+        myInfo.province = data.province;
+        myInfo.gender = data.gender;
+        myInfo.school = data.school;
+        myInfo.signature = data.signature;
+        myInfo.unique_id = data.unique_id;
+    }
+};
+
+const showUpdateBackgroundDialog = ref<boolean>(false);
+const openDialog = () => {
+    showUpdateBackgroundDialog.value = true;
+};
+// const singleBackgroundUrl = ref<string>("");
+const updateBackground = async (message: string) => {
+    // 应该是选择图片，这里先用弹出框处理
+    showUpdateBackgroundDialog.value = true;
+    const data = {
+        cover_url: message,
+    };
+    const response = await UserApi.updateUserInfoApi(null, data);
+    console.log("update response", response);
+    if (response.data.code === 200) {
+        ElMessage({
+            type: "success",
+            message: "修改成功！",
+        });
+        // 重新获取
+        getUserinfo();
+    }
 };
 </script>
 
@@ -36,62 +99,67 @@ const getUserinfo = async () => {
         <!-- 背景 -->
         <div class="background">
             <div class="background-header">
-                <span>
-                    <ion-icon
-                        name="image-outline"
-                        class="backgrond-icon"
-                    ></ion-icon>
-                </span>
-                <div class="usermenu">
-                    <!-- 求更新 -->
-                    <span>
-                        <!-- <img src="../../assets/icon/finger-right.png" alt="" /> -->
+                <img :src="myInfo.cover_url" alt="" />
+                <div class="header">
+                    <span @click="openDialog">
                         <ion-icon
-                            @click="navigateTo('/me/for-update')"
-                            name="paper-plane-outline"
-                            class="usermenu-icon"
+                            name="image-outline"
+                            class="backgrond-icon"
                         ></ion-icon>
                     </span>
+                    <div class="usermenu">
+                        <!-- 求更新 -->
+                        <span>
+                            <!-- <img src="../../assets/icon/finger-right.png" alt="" /> -->
+                            <ion-icon
+                                @click="navigateTo('/me/for-update')"
+                                name="paper-plane-outline"
+                                class="usermenu-icon"
+                            ></ion-icon>
+                        </span>
 
-                    <!-- 主页访客 -->
-                    <span>
-                        <!-- <img src="../../assets/icon/menu.png" alt="" /> -->
-                        <ion-icon
-                            @click="navigateTo('/me/visitor')"
-                            name="people-outline"
-                            class="usermenu-icon"
-                        ></ion-icon>
-                    </span>
+                        <!-- 主页访客 -->
+                        <span>
+                            <!-- <img src="../../assets/icon/menu.png" alt="" /> -->
+                            <ion-icon
+                                @click="navigateTo('/me/visitor')"
+                                name="people-outline"
+                                class="usermenu-icon"
+                            ></ion-icon>
+                        </span>
 
-                    <!-- 搜索 -->
-                    <span>
-                        <!-- <img src="../../assets/icon/menu.png" alt="" /> -->
-                        <ion-icon
-                            name="search-outline"
-                            class="usermenu-icon"
-                        ></ion-icon>
-                    </span>
+                        <!-- 搜索 -->
+                        <span>
+                            <!-- <img src="../../assets/icon/menu.png" alt="" /> -->
+                            <ion-icon
+                                @click="navigateTo('/me/search')"
+                                name="search-outline"
+                                class="usermenu-icon"
+                            ></ion-icon>
+                        </span>
 
-                    <!-- 设置 -->
-                    <span>
-                        <!-- <img src="../../assets/icon/menu.png" alt="" /> -->
-                        <ion-icon
-                            name="reorder-three-outline"
-                            class="usermenu-icon"
-                        ></ion-icon>
-                    </span>
+                        <!-- 设置 -->
+                        <span>
+                            <!-- <img src="../../assets/icon/menu.png" alt="" /> -->
+                            <ion-icon
+                                name="reorder-three-outline"
+                                class="usermenu-icon"
+                            ></ion-icon>
+                        </span>
+                    </div>
                 </div>
             </div>
+
             <div class="background-introduction">
                 <div class="introduction-box">
                     <div class="avatar">
-                        <img src="../../assets/img/avatar.png" alt="avatar" />
+                        <img :src="myInfo.avatar" alt="avatar" />
                     </div>
                     <div class="introduction">
-                        <div class="name">简至</div>
+                        <div class="name">{{ myInfo.nickname }}</div>
                         <div class="douyin-code">
                             <span>抖音号：</span>
-                            <span>jianzhi2001</span>
+                            <span>{{ myInfo.unique_id }}</span>
                             <span class="qr-code">
                                 <ion-icon name="qr-code-outline"></ion-icon>
                             </span>
@@ -110,6 +178,7 @@ const getUserinfo = async () => {
                         <span>124</span>
                         <span>获赞</span>
                     </div>
+
                     <div>
                         <span>3778</span>
                         <span>朋友</span>
@@ -128,14 +197,16 @@ const getUserinfo = async () => {
             <!-- 介绍 -->
             <div class="description-box">
                 <div class="description">
-                    <div>每晚12：00直播，记得来观看哦！</div>
-                    <div>商务v:jockers</div>
-                    <div>谢谢关注宝宝的每一位小可爱啊！</div>
+                    <div>{{ myInfo.signature }}</div>
                 </div>
                 <div class="description-other">
-                    <div class="sex">女</div>
-                    <div class="address">广东-广州</div>
-                    <div class="university">中山大学</div>
+                    <div class="sex">{{ myInfo.gender }}</div>
+                    <div class="address">
+                        {{ myInfo.country }}-{{ myInfo.province }}-{{
+                            myInfo.city
+                        }}
+                    </div>
+                    <div class="university">{{ myInfo.school }}</div>
                 </div>
             </div>
 
@@ -205,20 +276,17 @@ const getUserinfo = async () => {
             </div>
         </div>
 
-        <Footer class="footer"></Footer>
+        <UpdateBackground
+            v-model:showDialog="showUpdateBackgroundDialog"
+            @new-background="updateBackground"
+        ></UpdateBackground>
     </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .me {
     width: 100%;
     height: 100%;
-    position: relative;
-}
-.footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
 }
 
 .background {
@@ -226,15 +294,32 @@ const getUserinfo = async () => {
     flex-direction: column;
     width: 100%;
     height: 22rem;
-    padding: 1rem 1.8rem;
-    background-image: url(../../assets/img/background.png);
+
+    // 需要更换的url地址不能写在这里
+    // background-image: url(../../assets/img/background.png);
     color: var(--white);
 }
 
 .background-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    img {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        padding: 1rem 1.8rem;
+    }
 }
 
 .backgrond-icon {
@@ -256,12 +341,15 @@ const getUserinfo = async () => {
 }
 
 .background-introduction {
-    flex: 1;
-    display: flex;
-    align-items: center;
+    // flex: 1;
+    position: absolute;
+    top: 10rem;
+    // display: flex;
+    // align-items: center;
 }
 
 .introduction-box {
+    z-index: 15;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -280,10 +368,10 @@ const getUserinfo = async () => {
 }
 
 .content {
-    max-width: 420px;
-    position: absolute;
-    top: 21rem;
-    width: 100%;
+    flex: 1;
+    // position: absolute;
+    // top: 21rem;
+    // width: 100%;
     border-radius: var(--rounded-md) var(--rounded-md) 0 0;
     background-color: var(--white);
     color: var(--black);
