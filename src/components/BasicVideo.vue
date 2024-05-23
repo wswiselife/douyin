@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import Footer from "./footer/Footer.vue";
 
 const videoNode = ref<HTMLVideoElement | null>(null);
 // 视频的暂停与播放
@@ -26,8 +25,6 @@ function showProgress() {
     // console.log("duration.value", duration.value);
     showProgress.value = true;
 }
-
-
 
 const isPause = ref<Boolean>(false);
 const mark = () => {
@@ -56,12 +53,10 @@ const mark = () => {
 
 <template>
     <div class="video-wrapper">
-        <!--  -->
-
         <!-- video -->
         <video
             ref="videoNode"
-            src="@/assets/video/我是香秀.mp4"
+            src="@/assets/video/qianqianlong.mp4"
             loop
             class="video"
             preload="true"
@@ -98,8 +93,7 @@ const mark = () => {
 .video-wrapper {
     font-size: 1.4rem;
     width: 100%;
-    height: 100%;
-    background-color: rgb(0, 0, 0);
+    height: calc(100% - 58px);
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -111,18 +105,16 @@ const mark = () => {
 .video {
     width: 100%;
     height: calc(100vh - 58px);
-    max-width: 420px;
 }
 
 .mark {
-    z-index: 999;
+    z-index: 15;
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    bottom: 58px;
-    // background-color: #555;
-    // opacity: 0.5;
+    bottom: 0;
+
     display: flex;
     justify-content: center;
     align-items: center;

@@ -27,13 +27,14 @@ const goLive = () => {
         <div class="center">
             <!-- 中间部分 -->
             <div class="content">
-                <img
-                    src="../../../assets/img/bg-svg.jpg"
-                    alt="cover"
-                    class="img"
-                />
-
-                <div class="title">暂时还没有粉丝点击“求更新”</div>
+                <div class="title">
+                    <span>暂时还没有粉丝点击“求更新”</span>
+                    <img
+                        src="../../../assets/img/bg-svg.jpg"
+                        alt="cover"
+                        class="img"
+                    />
+                </div>
                 <div class="subtitle">
                     当粉丝期待你的新作品时，会点击“求更新”提醒你
                 </div>
@@ -68,26 +69,25 @@ const goLive = () => {
         height: calc(100% - 58px);
 
         .content {
-            position: relative;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            width: 100%;
 
             .title {
                 font-size: 16px;
                 font-weight: 600;
                 padding-block: 6px;
+
+                .img {
+                    position: absolute;
+                    width: 100px;
+                }
             }
 
             .subtitle {
                 font-size: 14px;
-            }
-
-            .img {
-                position: absolute;
-                bottom: 100%;
-                width: 100%;
             }
         }
     }

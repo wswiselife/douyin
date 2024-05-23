@@ -4,6 +4,7 @@ import HomeView from "../views/homeView/HomeView.vue";
 import Me from "../views/me/Me.vue";
 import Message from "../views/message/Message.vue";
 import Shop from "../views/shop/Shop.vue";
+import Public from "@/views/public/Public.vue";
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -25,6 +26,12 @@ const routes: Array<RouteRecordRaw> = [
         component: Shop,
         meta: { showFooter: true },
     },
+    {
+        name: "public",
+        path: "/public",
+        component: Public,
+        meta: { showFooter: true },
+    },
 
     // me
     // 懒加载
@@ -43,6 +50,10 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/me/search",
         component: () => import("../views/me/children/Search.vue"),
+    },
+    {
+        path: "/public/create-video",
+        component: () => import("../views/public/CreateVideo.vue"),
     },
 ];
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import EditUserInfoItem from "@/components/EditUserInfoItem.vue";
+import CommonVertical from "@/components/CommonVertical.vue";
 
 const router = useRouter();
 
@@ -37,37 +37,37 @@ const goBack = () => {
                 </div>
             </div>
             <div class="userinfo-list">
-                <EditUserInfoItem
-                    title="名字"
+                <CommonVertical
+                    leftText="名字"
                     content="杨老虎"
-                ></EditUserInfoItem>
-                <EditUserInfoItem
-                    title="抖音号"
+                ></CommonVertical>
+                <CommonVertical
+                    leftText="抖音号"
                     content="12345xiaolaohu"
-                ></EditUserInfoItem>
-                <EditUserInfoItem
-                    title="简介"
+                ></CommonVertical>
+                <CommonVertical
+                    leftText="简介"
                     content="每晚12：00直播，记得来观看哦！能遇见你，是我这辈子最大的荣幸，很高兴认识你"
-                ></EditUserInfoItem>
-                <EditUserInfoItem title="性别" content="女"></EditUserInfoItem>
-                <EditUserInfoItem
-                    title="生日"
+                ></CommonVertical>
+                <CommonVertical label="性别" content="女"></CommonVertical>
+                <CommonVertical
+                    leftText="生日"
                     content="1998-04-15"
-                ></EditUserInfoItem>
-                <EditUserInfoItem
-                    title="所在地"
+                ></CommonVertical>
+                <CommonVertical
+                    leftText="所在地"
                     content="广东-广州"
-                ></EditUserInfoItem>
-                <EditUserInfoItem
-                    title="学校"
+                ></CommonVertical>
+                <CommonVertical
+                    leftText="学校"
                     content="点击设置"
-                ></EditUserInfoItem>
+                ></CommonVertical>
             </div>
 
             <div class="br"></div>
 
             <div class="edit-serve">
-                <EditUserInfoItem title="编辑服务"></EditUserInfoItem>
+                <CommonVertical label="编辑服务"></CommonVertical>
             </div>
         </div>
     </div>

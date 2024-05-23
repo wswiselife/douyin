@@ -27,30 +27,35 @@ const loveClick = () => {};
                     icon="heart-circle-outline"
                     :click="loveClick"
                     outline
+                    small
                 ></CommonButton>
                 <CommonButton
                     label="收藏"
                     icon="star-outline"
                     :click="loveClick"
                     outline
+                    small
                 ></CommonButton>
                 <CommonButton
                     label="作品"
                     icon="play-circle-outline"
                     :click="loveClick"
                     outline
+                    small
                 ></CommonButton>
                 <CommonButton
                     label="私密"
                     icon="lock-closed-outline"
                     :click="loveClick"
                     outline
+                    small
                 ></CommonButton>
                 <CommonButton
                     label="观看历史"
                     icon="time-outline"
                     :click="loveClick"
                     outline
+                    small
                 ></CommonButton>
 
                 <!-- <div class="select-item">

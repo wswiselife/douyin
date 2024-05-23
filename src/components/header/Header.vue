@@ -3,13 +3,13 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 
 interface HeaderProps {
-    case: String;
-    leftIcon?: String;
-    leftText?: String;
-    centerText?: String;
-    rightText?: String;
-    rightIcon?: String;
-    rightClick?: Function;
+    case: string;
+    leftIcon?: string;
+    leftText?: string;
+    centerText?: string;
+    rightText?: string;
+    rightIcon?: string;
+    rightClick?: () => void;
 }
 
 const Props = defineProps<HeaderProps>();

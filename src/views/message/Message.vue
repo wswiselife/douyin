@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import HeaderSlot from "../../components/header/HeaderSlot.vue";
+import Header from "@/components/header/Header.vue";
 </script>
 
 <template>
@@ -18,8 +19,10 @@ import HeaderSlot from "../../components/header/HeaderSlot.vue";
             </template>
         </HeaderSlot>
 
+        <Header case="one"></Header>
+
         <!-- friends -->
-        <!-- <div class="friends-content">
+        <div class="friends-content">
             <div class="friends-avatar">
                 <img src="../../assets/img/avatar.png" alt="avatar" />
                 <div class="name">lisi</div>
@@ -36,7 +39,7 @@ import HeaderSlot from "../../components/header/HeaderSlot.vue";
                 <img src="../../assets/img/avatar.png" alt="avatar" />
                 <div class="name">状态管理</div>
             </div>
-        </div> -->
+        </div>
 
         <!-- message list -->
         <div class="message-content">

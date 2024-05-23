@@ -51,7 +51,7 @@ const tab = (num: number) => {
         >
             <span>商城</span>
         </div>
-        <div class="nav-tab" @click="tab()">
+        <div class="nav-tab" @click="tab(3)">
             <div class="add-btn">
                 <ion-icon name="add-outline"></ion-icon>
             </div>
