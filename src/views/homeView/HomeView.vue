@@ -8,7 +8,7 @@ const piniaStore = usePiniaStore();
 
 const pinia = storeToRefs(piniaStore);
 
-console.log("pinia.$state", pinia.showComment);
+// console.log("pinia.$state", pinia.showComment);
 
 const commentHandle = () => {
     console.log("click comment");

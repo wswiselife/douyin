@@ -25,7 +25,7 @@ const router = useRoute();
     width: 100vw;
     height: 100vh;
     max-width: 480px;
-    background-color: #ffffff;
+    background-color: #5b5656;
 }
 
 .container {
