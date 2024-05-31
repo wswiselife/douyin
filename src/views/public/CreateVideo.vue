@@ -1,7 +1,16 @@
 <script setup lang="ts">
+import { onMounted, ref } from "vue";
+
 import CommonButton from "@/components/CommonButton.vue";
 import CommonVertical from "@/components/CommonVertical.vue";
 import Header from "@/components/header/Header.vue";
+import videoApi from "@/api/video.api.ts";
+import { usePiniaStore } from "@/store/store";
+import { ElMessage } from "element-plus";
+import { useRouter } from "vue-router";
+
+const piniaStore = usePiniaStore();
+const router = useRouter();
 
 const topic = () => {
     console.log("topic");
@@ -10,10 +19,46 @@ const topic = () => {
 const friend = () => {
     console.log("friend");
 };
-
+/**
+ * 存草稿
+ */
 const save = () => {};
 
-const publicVideo = () => {};
+const getPiniaVideoFile = () => {
+    videoFile.value = piniaStore.uploadedFile;
+};
+
+onMounted(() => {
+    getPiniaVideoFile();
+});
+
+const cover = ref<string>("https://s2.loli.net/2024/05/11/hd7yZGNz68RJpI2.jpg");
+const description = ref<string>("");
+const videoFile = ref<any>();
+/**
+ * 发布视频
+ */
+const publicVideo = async () => {
+    // console.log("videoFile.value", videoFile.value);
+
+    const formData = new FormData();
+    // file字段需要匹配后端
+    formData.append("file", videoFile.value);
+    formData.append("description", description.value);
+    formData.append("cover", cover.value);
+
+    const response = await videoApi.uploadVideoApi(formData);
+    if (response.code === 200) {
+        console.log(response.message);
+        ElMessage({
+            type: "success",
+            message: "上传成功！3s后跳转首页",
+        });
+        setTimeout(() => {
+            router.push("/home");
+        }, 3000);
+    }
+};
 </script>
 
 <template>
@@ -26,6 +71,7 @@ const publicVideo = () => {};
                     type="text"
                     class="input"
                     placeholder="添加作品描述..."
+                    v-model="description"
                 />
 
                 <div class="label">

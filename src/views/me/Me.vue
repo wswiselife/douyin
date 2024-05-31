@@ -43,13 +43,18 @@ const myInfo = reactive({
     city: "",
     avatar: "",
     birthday: "",
+    aweme_count: "", //作品数
+    favoriting_count: "", //获赞数
+    follower_count: "", // 关注数
+    following_count: "", // 粉丝数
+    friends: "", // 朋友数
 });
 const getUserinfo = async () => {
     const response = await UserApi.getUserInfoApi();
     console.log("response", response);
     // 持久化处理todo
-    if (response.data.code === 200) {
-        let data = response.data.data.result;
+    if (response.code === 200) {
+        let data = response.data[0];
         // console.log("myInfo", myInfo);
         // for (let mes in data) {
         //     console.log(mes);
@@ -67,6 +72,11 @@ const getUserinfo = async () => {
         myInfo.school = data.school;
         myInfo.signature = data.signature;
         myInfo.unique_id = data.unique_id;
+        myInfo.aweme_count = data.aweme_count;
+        myInfo.favoriting_count = data.favoriting_count;
+        myInfo.follower_count = data.follower_count;
+        myInfo.following_count = data.following_count;
+        myInfo.friends = data.friends;
     }
 };
 
@@ -175,20 +185,20 @@ const updateBackground = async (message: string) => {
             <div class="information">
                 <div class="information-box">
                     <div>
-                        <span>124</span>
+                        <span>{{ myInfo.favoriting_count }}</span>
                         <span>获赞</span>
                     </div>
 
                     <div>
-                        <span>3778</span>
+                        <span>{{ myInfo.friends || 0 }}</span>
                         <span>朋友</span>
                     </div>
                     <div>
-                        <span>69</span>
+                        <span>{{ myInfo.follower_count }}</span>
                         <span>关注</span>
                     </div>
                     <div>
-                        <span>173.2万</span>
+                        <span>{{ myInfo.following_count }}</span>
                         <span>粉丝</span>
                     </div>
                 </div>
@@ -263,7 +273,7 @@ const updateBackground = async (message: string) => {
             <div class="video-content">
                 <!-- 分类 -->
                 <div class="video-classify">
-                    <div>作品</div>
+                    <div>作品{{ myInfo.aweme_count }}</div>
                     <div>私密</div>
                     <div>喜欢</div>
                     <div>收藏</div>

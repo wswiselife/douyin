@@ -2,15 +2,22 @@
 import CommonButton from "@/components/CommonButton.vue";
 // import Header from "@/components/header/Header.vue";
 import { useRouter } from "vue-router";
+import Upload from "@/components/Upload.vue";
 
 const router = useRouter();
 
-const publicVideo = () => {
-    router.push("/public/create-video");
-};
+// 不做处理
+const publicVideo = () => {};
 
 const publicPhoto = () => {
     console.log("photo");
+};
+
+const getVideoFile = (file: any) => {
+    if (file) {
+        // console.log("file", file);
+        router.push("/public/preview-video");
+    }
 };
 </script>
 
@@ -22,11 +29,14 @@ const publicPhoto = () => {
         </div>
         <div class="content">
             <div class="public-video">
-                <CommonButton
-                    label="发布视频"
-                    :click="publicVideo"
-                    icon="caret-back-circle-outline"
-                ></CommonButton>
+                <Upload mediaType="video" @videoFile="getVideoFile">
+                    <CommonButton
+                        label="发布视频"
+                        :click="publicVideo"
+                        icon="caret-back-circle-outline"
+                    >
+                    </CommonButton>
+                </Upload>
             </div>
             <div class="public-photo">
                 <CommonButton

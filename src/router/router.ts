@@ -55,6 +55,14 @@ const routes: Array<RouteRecordRaw> = [
         path: "/public/create-video",
         component: () => import("../views/public/CreateVideo.vue"),
     },
+    {
+        path: "/public/preview-video",
+        component: () => import("../views/public/PreviewVideo.vue"),
+    },
+    {
+        path: "/public/preview-image",
+        component: () => import("../views/public/PreviewImage.vue"),
+    },
 ];
 
 const router = createRouter({

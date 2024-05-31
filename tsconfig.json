@@ -24,7 +24,8 @@
     // alias
     "baseUrl": ".",
     "paths": {
-      "@/*":["src/*"]
+      "@/*":["src/*"],
+      "@": ["./"]
     },
 
     // element plus 类型
