@@ -102,6 +102,15 @@ const updateBackground = async (message: string) => {
         getUserinfo();
     }
 };
+
+const logout = () => {
+    localStorage.removeItem("token");
+    router.push("/");
+};
+
+const toggle = () => {
+    pinia.isShowMeSeting();
+};
 </script>
 
 <template>
@@ -109,7 +118,7 @@ const updateBackground = async (message: string) => {
         <!-- 背景 -->
         <div class="background">
             <div class="background-header">
-                <img :src="myInfo.cover_url" alt="" />
+                <!-- <img :src="myInfo.cover_url" alt="" /> -->
                 <div class="header">
                     <span @click="openDialog">
                         <ion-icon
@@ -117,6 +126,7 @@ const updateBackground = async (message: string) => {
                             class="backgrond-icon"
                         ></ion-icon>
                     </span>
+
                     <div class="usermenu">
                         <!-- 求更新 -->
                         <span>
@@ -149,12 +159,21 @@ const updateBackground = async (message: string) => {
                         </span>
 
                         <!-- 设置 -->
-                        <span>
+                        <span class="setting" @click="toggle">
                             <!-- <img src="../../assets/icon/menu.png" alt="" /> -->
                             <ion-icon
                                 name="reorder-three-outline"
                                 class="usermenu-icon"
                             ></ion-icon>
+
+                            <!-- 登录/注册 -->
+                            <div class="box" v-if="pinia.showMeSetting">
+                                <div class="item" @click="navigateTo('/login')">
+                                    登录
+                                </div>
+                                <div class="item" @click="logout">退出登录</div>
+                                <div class="item">注册</div>
+                            </div>
                         </span>
                     </div>
                 </div>
@@ -341,6 +360,17 @@ const updateBackground = async (message: string) => {
     justify-content: center;
     align-content: center;
     gap: 1.2rem;
+
+    .setting {
+        position: relative;
+        .box {
+            background-color: #887a7a;
+            position: absolute;
+            top: 40px;
+            right: 0;
+            width: 100px;
+        }
+    }
 }
 
 .usermenu-icon {

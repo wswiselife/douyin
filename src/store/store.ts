@@ -5,6 +5,7 @@ export const usePiniaStore = defineStore("pinia", {
         showComment: false,
         videoBase64File: "",
         uploadedFile: null as File | null,
+        showMeSetting: false,
     }),
     actions: {
         change() {
@@ -18,6 +19,9 @@ export const usePiniaStore = defineStore("pinia", {
         // 存储处理文件形式的视频
         setUploadedFile(file: File) {
             this.uploadedFile = file;
+        },
+        isShowMeSeting() {
+            this.showMeSetting = !this.showMeSetting;
         },
     },
 });

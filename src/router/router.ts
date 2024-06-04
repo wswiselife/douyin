@@ -32,6 +32,11 @@ const routes: Array<RouteRecordRaw> = [
         component: Public,
         meta: { showFooter: true },
     },
+    {
+        name: "login",
+        path: "/login",
+        component: () => import("../views/login/Login.vue"),
+    },
 
     // me
     // 懒加载

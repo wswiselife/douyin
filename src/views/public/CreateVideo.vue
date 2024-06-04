@@ -55,7 +55,7 @@ const publicVideo = async () => {
             message: "上传成功！3s后跳转首页",
         });
         setTimeout(() => {
-            router.push("/home");
+            router.push("/");
         }, 3000);
     }
 };

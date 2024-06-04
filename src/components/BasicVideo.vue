@@ -14,10 +14,25 @@ export default {
             page: 1,
             dataList: [
                 {
-                    id: "1",
-                    url: "http://localhost:3000/uploads/2f00405d122d7ea1f5ee5a52ded71ea5",
+                    // id待处理-2024-06-02
+                    // id: "1",
+                    url: "",
+                    video_id: null,
+                    followStatus: "",
+                    like_count: "",
+                    likeStatus: "",
+                    comment_count: "",
+                    collection_count: "",
+                    collectionStatus: "",
+                    share_count: "",
+                    description: "",
+                    suggest_words: "",
+                    nickname: "",
+                    avatar: "",
+                    videoAuthId: null,
                 },
             ],
+
             isPaused: false, // 控制暂停图标的显示
             swiperOption: {
                 on: {
@@ -51,6 +66,7 @@ export default {
             },
         };
     },
+
     watch: {
         // Watch for changes in the dataList array length
         dataList: {
@@ -62,12 +78,19 @@ export default {
                     //     // Push the new data into the dataList array
                     //     this.dataList.push(newData);
                     // });
+                    // console.log("this.dataList", this.dataList);
                     this.fetchNewData();
                 }
             },
             immediate: true,
             deep: true, // Deep watch for changes within dataList array
         },
+    },
+    mounted() {
+        // this.fetchNewData();
+    },
+    created() {
+        // this.$emit("update-video-info", this.dataList);
     },
     methods: {
         // 请求数据
@@ -90,12 +113,28 @@ export default {
             // console.log("video-response", response);
             // this.dataList.push(newData);
             if (response.code === 200) {
+                // console.log("response.data", response.data);
+
                 let newVideo = {
                     id: response.data.id,
                     url: response.data.video_url,
+                    video_id: response.data.video_id,
+                    followStatus: response.data.followStatus,
+                    like_count: response.data.like_count,
+                    likeStatus: response.data.likeStatus,
+                    comment_count: response.data.comment_count,
+                    collection_count: response.data.collection_count,
+                    collectionStatus: response.data.collectionStatus,
+                    description: response.data.description,
+                    share_count: response.data.share_count,
+                    suggest_words: response.data.suggest_words,
+                    nickname: response.data.nickname,
+                    avatar: response.data.avatar,
+                    videoAuthId: response.data.videoAuthId,
                 };
                 // console.log("newVideo", newVideo);
                 this.dataList.push(newVideo);
+                // console.log("this.dataList", this.dataList);
             }
         },
 
@@ -112,6 +151,8 @@ export default {
 
             // Play the selected video
             this.$refs.videos[index].play();
+            // 将视频传递
+            // this.$emit("update-video-info", this.dataList[index]);
         },
         // 向下
         nextVideo(index) {
@@ -122,6 +163,8 @@ export default {
                 this.$refs.videos[index - 1].currentTime = 0; // Rewind the previous video
             }
             this.$refs.videos[index].play(); // Play the current video
+            // 将视频传递
+            // this.$emit("update-video-info", this.dataList[index]);
         },
         // 向上
         prevVideo(index) {
@@ -132,6 +175,8 @@ export default {
                 this.$refs.videos[index + 1].currentTime = 0; // Rewind the next video
             }
             this.$refs.videos[index].play(); // Play the current video
+            // 将视频传递
+            // this.$emit("update-video-info", this.dataList[index]);
         },
         // 视频切换
         toggleVideo(index, dataList) {
@@ -228,7 +273,9 @@ export default {
 
         handleSlideChange(swiper) {
             const activeIndex = swiper.activeIndex;
-            console.log(`当前屏幕上的视频为: ${activeIndex + 1}`);
+            // console.log(`当前数组中共有${this.dataList.length + 1}个视频`);
+            // console.log(`当前屏幕上的视频为: ${activeIndex + 1}`);
+            this.$emit("update-video-info", this.dataList[activeIndex]);
 
             const videos = this.$refs.videos;
             for (let i = 0; i < videos.length; i++) {
@@ -236,6 +283,7 @@ export default {
                     // 当前屏幕上的视频，重头开始播放
                     videos[i].currentTime = 0;
                     videos[i].play();
+                    // 将视频传递
                 } else {
                     // 不在当前屏幕上的视频，暂停并重置时间
                     videos[i].pause();
@@ -255,7 +303,6 @@ export default {
                 //     this.dataList.push(newData);
                 // });
                 this.fetchNewData();
-                console.log(`当前数组中共有${this.dataList.length + 1}个视频`);
             }
         },
 

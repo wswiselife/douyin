@@ -14,15 +14,14 @@ declare module "axios" {
 
 const axiosInstance: AxiosInstance = axios.create({
     baseURL: config.BASE_URL,
-    timeout: 10000,
+    timeout: 60000,
 });
 
 axiosInstance.interceptors.request.use(
     config => {
         // 处理
         // const token = localStorage.getItem('token')
-        const token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo0LCJhY2NvdW50Ijoic2VvIiwiaWF0IjoxNzE3MTg0MzIzLCJleHAiOjE3MTc3ODkxMjN9.uy9wWS81i62Coqy_5IKVbTuIix7VP_EYhkz5dBAG0CY";
+        const token = localStorage.getItem("token");
         config.headers["Authorization"] = "Bearer " + token;
         if (!config.headers["Content-Type"]) {
             config.headers["Content-Type"] = "application/json";

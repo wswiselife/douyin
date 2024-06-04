@@ -1,18 +1,33 @@
 <script setup lang="ts">
-import { watch } from "vue";
+import { watch, ref } from "vue";
 import { usePiniaStore } from "../store/store";
-import { storeToRefs } from "pinia";
+// import { storeToRefs } from "pinia";
+import videoApi from "../api/video.api";
 
 const pinia = usePiniaStore();
 
-const show = storeToRefs(pinia);
+// const show = storeToRefs(pinia);
+
+const Props = defineProps<{
+    videoId: number;
+}>();
+
+const commentList = ref<any>([]);
+
+const getComment = async () => {
+    const response = await videoApi.getCommentApi(Props.videoId);
+    if (response.code == 200) {
+        console.log("comment-response", response);
+        commentList.value = response.data;
+    }
+};
 
 watch(
     () => pinia.showComment,
-    (newVal, oldVal) => {
-        console.log("newVal", newVal);
-        console.log("oldVal", oldVal);
-        console.log("show", show);
+    newVal => {
+        if (newVal) {
+            getComment();
+        }
     }
 );
 </script>
@@ -26,10 +41,18 @@ watch(
             </div>
         </div>
 
-        <div>1</div>
-        <div>2</div>
-        <div>3</div>
-        <div>4</div>
+        <div class="content">
+            <div
+                class="comment-item"
+                v-for="item in commentList"
+                :key="item.comment_id"
+            >
+                {{ item.content }}
+                <div class="time">
+                    {{ item.create_time }}
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 

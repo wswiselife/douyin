@@ -3,9 +3,9 @@ import { usePiniaStore } from "@/store/store";
 
 const piniaStore = usePiniaStore();
 
-const props = defineProps<{
-    mediaType: string;
-}>();
+// const props = defineProps<{
+//     mediaType: string;
+// }>();
 
 const emit = defineEmits(["videoFile"]);
 
@@ -20,7 +20,7 @@ const videoFile = (e: Event) => {
 
         // 替换方案-转base64存store
         let reader = new FileReader();
-        let videoBase64File = reader.readAsDataURL(uploadFile);
+        // let videoBase64File = reader.readAsDataURL(uploadFile);
 
         reader.onload = e => {
             // console.log("e-result", e.target.result);
