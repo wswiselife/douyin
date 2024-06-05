@@ -7,7 +7,11 @@ export default defineConfig({
     plugins: [vue()],
     resolve: {
         alias: {
-          '@': join(__dirname, "src"),
-        }
-      }
+            "@": join(__dirname, "src"),
+        },
+    },
+    base: "./",
+    build: {
+        target: "es2015",
+    },
 });
