@@ -177,7 +177,7 @@ const goBack = () => {
     justify-content: space-between;
     align-items: center;
     /* padding: 1.6rem 1.2rem; */
-    padding-inline: 1.2rem;
+    padding: 1.2rem;
 
     .left {
         .left-icon {

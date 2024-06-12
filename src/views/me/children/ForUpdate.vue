@@ -27,13 +27,17 @@ const goLive = () => {
         <div class="center">
             <!-- 中间部分 -->
             <div class="content">
-                <div class="title">
-                    <span>暂时还没有粉丝点击“求更新”</span>
-                    <img
-                        src="../../../assets/img/bg-svg.jpg"
-                        alt="cover"
-                        class="img"
-                    />
+                <div class="title-box">
+                    <div class="title">
+                        暂时还没有粉丝点击“求更新”
+                        <div class="img-box">
+                            <img
+                                src="../../../assets/img/bg-svg.jpg"
+                                alt="cover"
+                                class="img"
+                            />
+                        </div>
+                    </div>
                 </div>
                 <div class="subtitle">
                     当粉丝期待你的新作品时，会点击“求更新”提醒你
@@ -75,14 +79,25 @@ const goLive = () => {
             align-items: center;
             width: 100%;
 
-            .title {
-                font-size: 16px;
-                font-weight: 600;
-                padding-block: 6px;
+            .title-box {
+                width: 100%;
 
-                .img {
+                .title {
+                    position: relative;
+                    font-size: 16px;
+                    font-weight: 600;
+                    padding-block: 6px;
+                    text-align: center;
+                }
+                .img-box {
                     position: absolute;
-                    width: 100px;
+                    top: -200px;
+                    width: 100%;
+
+                    .img {
+                        width: 50%;
+                        height: 100%;
+                    }
                 }
             }
 

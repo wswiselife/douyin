@@ -9,28 +9,33 @@ export default {
         Swiper,
         SwiperSlide,
     },
+
     data() {
         return {
+            fetchId: this.videoIdList[this.startVideoIndex],
             page: 1,
+            currentVideoId: 1,
+            nextVideoId: null,
             dataList: [
-                {
-                    // id待处理-2024-06-02
-                    // id: "19",
-                    url: "http://110.41.17.28:3000/uploads/videos/951bdd0332ddd6876cf724b0d9b7ae63",
-                    video_id: 1,
-                    followStatus: 0,
-                    like_count: 0,
-                    likeStatus: 0,
-                    comment_count: 0,
-                    collection_count: 0,
-                    collectionStatus: 0,
-                    share_count: "",
-                    suggest_words: "相关搜索内容",
-                    nickname: "seo",
-                    avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwCrfqaZ2H95Cs7Cu9S81mqKV_feGdQfMf1A&s",
-                    description: "今天也好香泥！#甜妹 #圆脸 #今天也长这样",
-                    videoAuthId: 1,
-                },
+                // {
+                //     // id待处理-2024-06-02
+                //     id: "",
+                //     url: "",
+                //     video_id: 7,
+                //     followStatus: 0,
+                //     like_count: 2,
+                //     likeStatus: 0,
+                //     comment_count: 3,
+                //     collection_count: 2,
+                //     collectionStatus: 0,
+                //     share_count: "",
+                //     suggest_words: "相关搜索内容",
+                //     nickname: "用户1名称",
+                //     avatar: "https://p6-passport.byteacctimg.com/img/user-avatar/292f4d9e5f70bc6ee7fd939fc33f9ac8~50x50.awebp",
+                //     description:
+                //         "我不信你不喜欢甜妹？ 我不信~ #甜妹 #今天长这样",
+                //     videoAuthId: 2,
+                // },
             ],
 
             isPaused: false, // 控制暂停图标的显示
@@ -67,6 +72,17 @@ export default {
         };
     },
 
+    props: {
+        videoIdList: {
+            type: Array,
+            required: true,
+        },
+        startVideoIndex: {
+            type: Number,
+            required: true,
+        },
+    },
+
     watch: {
         // Watch for changes in the dataList array length
         dataList: {
@@ -79,63 +95,74 @@ export default {
                     //     this.dataList.push(newData);
                     // });
                     // console.log("this.dataList", this.dataList);
-
-                    this.fetchNewData();
+                    this.fetchNewData(this.fetchId);
                 }
             },
             immediate: true,
             deep: true, // Deep watch for changes within dataList array
         },
+        // 指定视频id-2024-06-10
+        // videoIdList: {
+        //     handler(newVal) {
+        //         console.log("newVal", newVal);
+        //         if (newVal && newVal.length > 0) {
+        //             this.fetchNewData();
+        //         }
+        //     },
+        //     immediate: true,
+        // },
     },
-    mounted() {
-        // this.fetchNewData();
-    },
-    created() {
-        // this.$emit("update-video-info", this.dataList);
-    },
+
     methods: {
         // 请求数据
-        async fetchNewData() {
-            // Simulated fetch request, replace with your actual fetch logic
-            // return new Promise(resolve => {
-            //     // Simulating delay for fetching data
-            //     setTimeout(() => {
-            //         // Simulated new data
-            //         const newData = {
-            //             id: (this.dataList.length + 1).toString(),
-            //             url: this.newUrl,
-            //         };
-            //         resolve(newData);
-            //     }, 100); // Adjust delay as needed
-            // })
+        async fetchNewData(videoId) {
+            // 如果fetchId为空，则停止请求并给出提示
+            if (!videoId) {
+                console.log("没有更多视频了！");
+                return;
+            }
 
-            // 获取服务器视频
-            const response = await videoApi.getVideoApi();
-            // console.log("video-response", response);
-            // this.dataList.push(newData);
+            const response = await videoApi.getVideoApi(videoId);
             if (response.code === 200) {
-                // console.log("response.data", response.data);
+                const existingVideoIndex = this.dataList.findIndex(
+                    video => video.id === response.data.id
+                );
+                if (existingVideoIndex === -1) {
+                    let newVideo = {
+                        id: response.data.id,
+                        url: response.data.video_url,
+                        video_id: response.data.video_id,
+                        followStatus: response.data.followStatus,
+                        like_count: response.data.like_count,
+                        likeStatus: response.data.likeStatus,
+                        comment_count: response.data.comment_count,
+                        collection_count: response.data.collection_count,
+                        collectionStatus: response.data.collectionStatus,
+                        description: response.data.description,
+                        share_count: response.data.share_count,
+                        suggest_words: response.data.suggest_words,
+                        nickname: response.data.nickname,
+                        avatar: response.data.avatar,
+                        videoAuthId: response.data.videoAuthId,
+                    };
+                    this.dataList.push(newVideo);
+                }
 
-                let newVideo = {
-                    id: response.data.id,
-                    url: response.data.video_url,
-                    video_id: response.data.video_id,
-                    followStatus: response.data.followStatus,
-                    like_count: response.data.like_count,
-                    likeStatus: response.data.likeStatus,
-                    comment_count: response.data.comment_count,
-                    collection_count: response.data.collection_count,
-                    collectionStatus: response.data.collectionStatus,
-                    description: response.data.description,
-                    share_count: response.data.share_count,
-                    suggest_words: response.data.suggest_words,
-                    nickname: response.data.nickname,
-                    avatar: response.data.avatar,
-                    videoAuthId: response.data.videoAuthId,
-                };
-                // console.log("newVideo", newVideo);
-                this.dataList.push(newVideo);
-                // console.log("this.dataList", this.dataList);
+                console.log("this.dataList", this.dataList);
+                const nextIndex = this.videoIdList.indexOf(this.fetchId) + 1;
+                this.fetchId =
+                    nextIndex < this.videoIdList.length
+                        ? this.videoIdList[nextIndex]
+                        : null;
+
+                // 如果fetchId为null，则停止请求并给出提示
+                if (!this.fetchId) {
+                    console.log("没有更多视频了！");
+                    return;
+                }
+
+                // 继续请求下一个视频
+                this.fetchNewData(this.fetchId);
             }
         },
 
@@ -159,6 +186,11 @@ export default {
         nextVideo(index) {
             // this.$refs.videos[index - 1].stop();
             // this.$refs.videos[index].play();
+
+            // If the next video is the last video in the list, stop autoplay
+            if (index === this.videoIdList.length - 1) {
+                this.swiperOption.autoplay = false;
+            }
             if (index > 0) {
                 this.$refs.videos[index - 1].pause(); // Pause the previous video
                 this.$refs.videos[index - 1].currentTime = 0; // Rewind the previous video
@@ -169,6 +201,10 @@ export default {
         },
         // 向上
         prevVideo(index) {
+            // If the current video is the last one, stop autoplay
+            if (index === this.videoIdList.length - 1) {
+                this.swiperOption.autoplay = false;
+            }
             // this.$refs.videos[index + 1].stop();
             // this.$refs.videos[index].play();
             if (index < this.dataList.length - 1) {
@@ -274,9 +310,17 @@ export default {
 
         handleSlideChange(swiper) {
             const activeIndex = swiper.activeIndex;
-            // console.log(`当前数组中共有${this.dataList.length + 1}个视频`);
-            console.log(`当前屏幕上的视频为: ${activeIndex + 1}`);
-            this.$emit("update-video-info", this.dataList[activeIndex]);
+            console.log(`当前屏幕上的视频为: ${this.videoIdList[activeIndex]}`);
+
+            // 获取当前播放视频的下一个视频 ID
+            const nextVideoId = this.videoIdList[activeIndex + 1];
+
+            console.log("nextVideoId", nextVideoId);
+
+            // 如果下一个视频 ID 存在，则调用 fetchNewData 方法获取数据
+            if (nextVideoId) {
+                this.fetchNewData(nextVideoId);
+            }
 
             const videos = this.$refs.videos;
             for (let i = 0; i < videos.length; i++) {
@@ -284,7 +328,6 @@ export default {
                     // 当前屏幕上的视频，重头开始播放
                     videos[i].currentTime = 0;
                     videos[i].play();
-                    // 将视频传递
                 } else {
                     // 不在当前屏幕上的视频，暂停并重置时间
                     videos[i].pause();
@@ -296,14 +339,13 @@ export default {
             this.handleVideoPause(activeIndex);
 
             // 当视频时倒数第二个的时候，请求数据
-            // Check if the active index is the second last position of dataList
-            if (activeIndex === this.dataList.length - 1) {
-                // Fetch new data
-                // this.fetchNewData().then(newData => {
-                //     // Push the new data into dataList array
-                //     this.dataList.push(newData);
-                // });
-                this.fetchNewData();
+            // Check if the active index is the second last position of videoIdList
+            if (activeIndex === this.videoIdList.length - 1) {
+                // Stop autoplay when reaching the last video
+                this.swiperOption.autoplay = false;
+            } else {
+                // Resume autoplay for other cases
+                this.swiperOption.autoplay = true;
             }
         },
 
@@ -398,7 +440,6 @@ import { ref } from "vue";
                 }
             }
             .video-box {
-                z-index: -1;
                 width: 100%;
                 height: calc(100vh - 100px);
             }

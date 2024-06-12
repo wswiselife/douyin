@@ -3,8 +3,13 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 
+const props = defineProps<{
+    leftCustomize?: boolean;
+}>();
 const goBack = () => {
-    router.back();
+    if (!props.leftCustomize) {
+        router.back();
+    }
 };
 </script>
 
@@ -21,7 +26,7 @@ const goBack = () => {
         </div>
 
         <div class="right-box slot">
-            <slot name="right" >right</slot>
+            <slot name="right">right</slot>
         </div>
     </div>
 </template>
@@ -31,6 +36,7 @@ const goBack = () => {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
     gap: 5px;
     padding: 0.8rem 1.2rem;
 }
@@ -44,6 +50,20 @@ const goBack = () => {
 .center-box {
     flex: 1;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    /* width: 100%; */
+    transform: translate(-50%, -50%);
+}
+
+.right-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .icon {

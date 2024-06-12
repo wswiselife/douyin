@@ -1,7 +1,15 @@
 <script setup lang="ts"></script>
 
 <template>
-    <div>shop</div>
+    <div class="shop">暂未处理哦！</div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.shop {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: calc(100% - 58px);
+}
+</style>

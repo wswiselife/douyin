@@ -1,11 +1,27 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import CommonVertical from "@/components/CommonVertical.vue";
+import BottomSheet from "@/components/BottomSheet.vue";
+import { ref } from "vue";
 
 const router = useRouter();
 
 const goBack = () => {
     router.back();
+};
+
+const navigateTo = (route: string) => {
+    router.push(route);
+};
+
+const showSexPopup = ref<boolean>(false);
+const sexSetting = () => {
+    showSexPopup.value = true;
+};
+
+const showBirthdayPopup = ref<boolean>(false);
+const birthdaySetting = () => {
+    showBirthdayPopup.value = true;
 };
 </script>
 
@@ -40,26 +56,36 @@ const goBack = () => {
                 <CommonVertical
                     leftText="名字"
                     content="杨老虎"
+                    @click="navigateTo('/me/change-name')"
                 ></CommonVertical>
                 <CommonVertical
                     leftText="抖音号"
                     content="12345xiaolaohu"
+                    @click="navigateTo('/me/change-douyinnum')"
                 ></CommonVertical>
                 <CommonVertical
                     leftText="简介"
+                    @click="navigateTo('/me/change-desc')"
                     content="每晚12：00直播，记得来观看哦！能遇见你，是我这辈子最大的荣幸，很高兴认识你"
                 ></CommonVertical>
-                <CommonVertical label="性别" content="女"></CommonVertical>
+                <CommonVertical
+                    label="性别"
+                    content="女"
+                    @click="sexSetting"
+                ></CommonVertical>
                 <CommonVertical
                     leftText="生日"
                     content="1998-04-15"
+                    @click="birthdaySetting"
                 ></CommonVertical>
                 <CommonVertical
                     leftText="所在地"
+                    @click="navigateTo('/me/change-location')"
                     content="广东-广州"
                 ></CommonVertical>
                 <CommonVertical
                     leftText="学校"
+                    @click="navigateTo('/me/change-school')"
                     content="点击设置"
                 ></CommonVertical>
             </div>
@@ -70,6 +96,19 @@ const goBack = () => {
                 <CommonVertical label="编辑服务"></CommonVertical>
             </div>
         </div>
+
+        <BottomSheet
+            :showPopup="showSexPopup"
+            @update:showPopup="val => (showSexPopup = val)"
+        >
+            <template #content> xingbie</template>
+        </BottomSheet>
+        <BottomSheet
+            :showPopup="showBirthdayPopup"
+            @update:showPopup="val => (showBirthdayPopup = val)"
+        >
+            <template #content> shengri </template>
+        </BottomSheet>
     </div>
 </template>
 

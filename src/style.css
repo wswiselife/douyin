@@ -8,6 +8,9 @@
     --white: #fff;
     --black: #000;
     --primary-color: #fc2f56;
+    --secondly-color: #ff758f;
+    --tip-bg: #453c3c;
+    --link-color: rgb(71, 132, 212);
 
     /* footer */
     --footer-background-color: #000;
@@ -20,6 +23,9 @@
     /* border radius */
     --rounded: 0.6rem;
     --rounded-md: 1.2rem;
+
+    /* shadow */
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
 }
 
 *,

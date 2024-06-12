@@ -5,11 +5,13 @@ import CommonButton from "@/components/CommonButton.vue";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 const piniaStore = usePiniaStore();
-const { videoBase64File } = storeToRefs(piniaStore);
+// base64
+// 文件-2024-06-11
+const { videoBase64File, uploadedFile } = storeToRefs(piniaStore);
 
 const router = useRouter();
 const prevStep = () => {
-    console.log("prev-step");
+    // console.log("prev-step");
     router.back();
 };
 const nextStep = () => {
@@ -28,12 +30,41 @@ const blobToVideo = () => {
 };
 
 // 监听 store 中的 videoBase64File 变化并更新视频
+// watch(
+//     videoBase64File,
+//     (newVal, oldVal) => {
+//         if (newVal !== oldVal) {
+//             // console.log("newVal", newVal);
+//             blobToVideo();
+//         }
+//     },
+//     {
+//         deep: true,
+//         immediate: true,
+//     }
+// );
+
+const handleFileUpload = (file: File) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+        const base64Data = reader.result as string;
+        videoBase64File.value = base64Data;
+        videoBlob.value = base64Data;
+    };
+    reader.onerror = error => {
+        console.error("File reading error:", error);
+    };
+};
+
+// 文件类型
 watch(
-    videoBase64File,
+    uploadedFile,
     (newVal, oldVal) => {
         if (newVal !== oldVal) {
             // console.log("newVal", newVal);
-            blobToVideo();
+            // blobToVideo();
+            handleFileUpload(newVal);
         }
     },
     {
@@ -53,17 +84,35 @@ onMounted(() => {
         <!-- video -->
         <video
             :src="videoBlob"
-            style="width: 100%; height: 70%"
+            style="width: 100%; height: 80%"
             controls
         ></video>
-        <CommonButton :click="prevStep" label="上一步" outline></CommonButton>
-        <CommonButton :click="nextStep" label="下一步"></CommonButton>
+        <div class="operate">
+            <CommonButton
+                :click="prevStep"
+                label="上一步"
+                outline
+            ></CommonButton>
+            <CommonButton :click="nextStep" label="下一步"></CommonButton>
+        </div>
     </div>
 </template>
 
 <style scoped lang="scss">
 .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
     width: 100%;
     height: 100%;
+    .operate {
+        display: flex;
+
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        width: 85%;
+    }
 }
 </style>

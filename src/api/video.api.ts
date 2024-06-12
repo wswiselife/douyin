@@ -19,10 +19,13 @@ const uploadVideoApi = (data: FormData) => {
  * 首页-获取视频
  * @returns
  */
-const getVideoApi = () => {
+const getVideoApi = videoId => {
     return request({
         url: "/v1/video/getVideo",
         method: "post",
+        data: {
+            videoId,
+        },
     });
 };
 
@@ -76,6 +79,33 @@ const createVideoDislikeApi = (video_id: number) => {
     });
 };
 
+const createCollectionApi = (videoId: number) => {
+    return request({
+        url: "/v1/collection/createCollection",
+        method: "post",
+        data: {
+            video_id: videoId,
+        },
+    });
+};
+
+const createCancelCollectionApi = (videoId: number) => {
+    return request({
+        url: "/v1/collection/deleteCollection",
+        method: "post",
+        data: {
+            video_id: videoId,
+        },
+    });
+};
+
+const getMyVideoApi = () => {
+    return request({
+        url: "/v1/user/getMyVideo",
+        method: "post",
+    });
+};
+
 export default {
     uploadVideoApi,
     getVideoApi,
@@ -83,4 +113,7 @@ export default {
     createVideoLikeApi,
     createVideoDislikeApi,
     createFollowApi,
+    createCollectionApi,
+    createCancelCollectionApi,
+    getMyVideoApi,
 };

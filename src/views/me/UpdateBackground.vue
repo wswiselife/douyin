@@ -31,19 +31,19 @@ const clearInput = () => {
         <el-dialog
             v-model="props.showDialog"
             @close="cancel"
-            title="Shipping address"
+            title="更改背景"
             width="65%"
         >
             <el-form>
-                <el-form-item label="Promotion name">
+                <el-form-item label="url">
                     <el-input v-model="newBackgroundUrl" autocomplete="off" />
                 </el-form-item>
             </el-form>
             <template #footer>
                 <div class="dialog-footer">
-                    <el-button @click="cancel">Cancel</el-button>
+                    <el-button @click="cancel">取消</el-button>
                     <el-button type="primary" @click="confirm">
-                        Confirm
+                        上传
                     </el-button>
                 </div>
             </template>

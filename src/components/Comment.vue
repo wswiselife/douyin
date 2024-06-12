@@ -36,7 +36,7 @@ watch(
     <div class="comment" v-if="pinia.showComment">
         <div class="header">
             <div class="people">大家都在搜：vue3</div>
-            <div class="close" @click="pinia.change()">
+            <div class="close" @click="pinia.changeCommentShow()">
                 <ion-icon name="close-outline"></ion-icon>
             </div>
         </div>

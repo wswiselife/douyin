@@ -12,24 +12,27 @@ export default {
     data() {
         return {
             page: 1,
+            currentVideoId: 1,
+            nextVideoId: null,
             dataList: [
                 {
                     // id待处理-2024-06-02
-                    // id: "19",
-                    url: "http://110.41.17.28:3000/uploads/videos/951bdd0332ddd6876cf724b0d9b7ae63",
-                    video_id: 1,
+                    // id: "1",
+                    url: "http://110.41.17.28:3000/uploads/86f2bec1beaadd1948bb94c262aa60f9",
+                    video_id: 7,
                     followStatus: 0,
-                    like_count: 0,
+                    like_count: 2,
                     likeStatus: 0,
-                    comment_count: 0,
-                    collection_count: 0,
+                    comment_count: 3,
+                    collection_count: 2,
                     collectionStatus: 0,
                     share_count: "",
                     suggest_words: "相关搜索内容",
-                    nickname: "seo",
-                    avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwCrfqaZ2H95Cs7Cu9S81mqKV_feGdQfMf1A&s",
-                    description: "今天也好香泥！#甜妹 #圆脸 #今天也长这样",
-                    videoAuthId: 1,
+                    nickname: "用户1名称",
+                    avatar: "https://p6-passport.byteacctimg.com/img/user-avatar/292f4d9e5f70bc6ee7fd939fc33f9ac8~50x50.awebp",
+                    description:
+                        "我不信你不喜欢甜妹？ 我不信~ #甜妹 #今天长这样",
+                    videoAuthId: 2,
                 },
             ],
 
@@ -67,6 +70,13 @@ export default {
         };
     },
 
+    props: {
+        videoIdList: {
+            type: Array,
+            required: true,
+        },
+    },
+
     watch: {
         // Watch for changes in the dataList array length
         dataList: {
@@ -85,6 +95,16 @@ export default {
             },
             immediate: true,
             deep: true, // Deep watch for changes within dataList array
+        },
+        // 指定视频id-2024-06-10
+        videoIdList: {
+            handler(newVal) {
+                console.log("newVal", newVal);
+                if (newVal && newVal.length > 0) {
+                    this.fetchNewData();
+                }
+            },
+            immediate: true,
         },
     },
     mounted() {
@@ -107,7 +127,8 @@ export default {
             //         };
             //         resolve(newData);
             //     }, 100); // Adjust delay as needed
-            // })
+            // });
+            console.log("this.videoIdList", this.videoIdList);
 
             // 获取服务器视频
             const response = await videoApi.getVideoApi();
@@ -398,7 +419,6 @@ import { ref } from "vue";
                 }
             }
             .video-box {
-                z-index: -1;
                 width: 100%;
                 height: calc(100vh - 100px);
             }

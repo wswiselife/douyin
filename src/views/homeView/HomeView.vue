@@ -4,17 +4,21 @@ import BasicVideo from "@/components/BasicVideo.vue";
 import Comment from "../../components/Comment.vue";
 
 import { usePiniaStore } from "@/store/store";
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import videoApi from "@/api/video.api.ts";
+import Utils from "@/utils/utils.ts";
 const piniaStore = usePiniaStore();
 
 // const pinia = storeToRefs(piniaStore);
 
 // console.log("pinia.$state", pinia.showComment);
 
+/**
+ * 评论
+ */
 const commentHandle = () => {
-    console.log("click comment");
-    piniaStore.change();
+    // console.log("click comment");
+    piniaStore.changeCommentShow();
 
     // console.log("piniaStore", pinia.showComment);
     // pinia.showComment = !pinia.showComment;
@@ -25,24 +29,28 @@ onMounted(() => {
     // fetchVideoInfo();
 });
 
+// 喜欢收藏作品等数据的列表播放（特定视频id）
+const videoIds = ref([1, 2, 3, 4, 5]); // 存放视频 ID 的数据
+
 const videoInfo = reactive({
-    video_id: null,
-    followStatus: null,
-    like_count: null,
-    likeStatus: null,
-    comment_count: "",
-    collection_count: "",
-    collectionStatus: null,
+    url: "http://110.41.17.28:3000/uploads/videos/951bdd0332ddd6876cf724b0d9b7ae63",
+    video_id: 1,
+    followStatus: 0,
+    like_count: 0,
+    likeStatus: 0,
+    comment_count: 0,
+    collection_count: 0,
+    collectionStatus: 0,
     share_count: "",
-    description: "",
-    suggest_words: "",
-    nickname: "",
-    avatar: "",
-    videoAuthId: null,
+    suggest_words: "相关搜索内容",
+    nickname: "seo",
+    avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwCrfqaZ2H95Cs7Cu9S81mqKV_feGdQfMf1A&s",
+    description: "今天也好香泥！#甜妹 #圆脸 #今天也长这样",
+    videoAuthId: 1,
 });
 
-const handleVideoInfoUpdate = data => {
-    console.log("子组件传递过来的数据", data);
+const handleVideoInfoUpdate = (data: any) => {
+    // console.log("子组件传递过来的数据", data);
 
     // 减少id和视频url
     videoInfo.followStatus = data.followStatus;
@@ -60,22 +68,71 @@ const handleVideoInfoUpdate = data => {
     videoInfo.videoAuthId = data.videoAuthId;
 };
 
+// 权限处理
+const hasPermission = () => {
+    Utils.isLoged();
+
+    // 控制登录之后操作
+    if (!piniaStore.isLoged) {
+        isShowTipContent.value = true;
+        tipContent.value = "请先登录";
+        setTimeout(() => {
+            isShowTipContent.value = false;
+        }, 2000);
+        return false;
+    }
+    return true;
+};
+
+/**
+ * 交互栏
+ * @param message
+ */
+const interactionRightCol = (message: string) => {
+    isShowTipContent.value = true;
+    tipContent.value = message;
+    setTimeout(() => {
+        isShowTipContent.value = false;
+    }, 2000);
+};
+
+// 关注
 const followHandle = async () => {
+    if (!hasPermission()) return;
+
     const response = await videoApi.createFollowApi(videoInfo.videoAuthId);
     console.log("response", response);
     if (response.code == 200) {
         videoInfo.followStatus = 1;
+        interactionRightCol("关注成功");
     }
 };
 
+const tipContent = ref<string>();
+const isShowTipContent = ref<boolean>(false);
 // 点击喜欢-0602
 // 方式1，根据状态，写个新接口处理喜欢或不喜欢
 // 方式2，判断喜欢的状态，设置条件发送请求
 // 20240602-待办，怎么将数据处理到本地的数据中，basevideo中的数据怎么得到的是新的数据
+/**
+ * 喜欢
+ */
 const likeHandler = async () => {
     // 如果起始为不喜欢，则调用喜欢的按钮，反之
     // 往上滑动之后，原来点击了喜欢的视频，样式又会回到没点赞的状态，但是实际上已经是点击了的，
     // 数据也改变了，但是由于数据是子组件传递过来的数据，所以这里有bug
+    Utils.isLoged();
+
+    // 控制登录之后操作
+    if (!piniaStore.isLoged) {
+        isShowTipContent.value = true;
+        tipContent.value = "请先登录";
+        setTimeout(() => {
+            isShowTipContent.value = false;
+        }, 2000);
+        return;
+    }
+
     if (videoInfo.likeStatus == 0) {
         const response = await videoApi.createVideoLikeApi(videoInfo.video_id);
         console.log("喜欢成功-response", response);
@@ -96,6 +153,31 @@ const likeHandler = async () => {
         }
     }
 };
+
+/**
+ * 收藏-20240607
+ */
+const collection = async () => {
+    if (!hasPermission()) return;
+
+    if (videoInfo.collectionStatus == 0) {
+        const response = await videoApi.createCollectionApi(videoInfo.video_id);
+        if (response.code == 200) {
+            videoInfo.collectionStatus = 1;
+            videoInfo.collection_count += 1;
+            interactionRightCol("收藏成功");
+        }
+    } else {
+        const response = await videoApi.createCancelCollectionApi(
+            videoInfo.video_id
+        );
+        if (response.code == 200) {
+            videoInfo.collectionStatus = 0;
+            videoInfo.collection_count -= 1;
+            interactionRightCol("取消收藏成功");
+        }
+    }
+};
 </script>
 
 <template>
@@ -103,6 +185,7 @@ const likeHandler = async () => {
         <BasicVideo
             class="video"
             @update-video-info="handleVideoInfoUpdate"
+            :videoIdList="videoIds"
         ></BasicVideo>
         <div class="box">
             <!-- 右侧交互栏 -->
@@ -116,25 +199,24 @@ const likeHandler = async () => {
                         ></ion-icon>
                     </div>
                 </div>
-                <div class="icon">
-                    <div @click="likeHandler">
-                        <ion-icon
-                            name="heart"
-                            v-if="videoInfo.likeStatus == 0"
-                        ></ion-icon>
-                        <ion-icon
-                            name="heart"
-                            v-else="videoInfo.likeStatus == 1"
-                            style="color: red"
-                        ></ion-icon>
-                    </div>
+                <div class="icon" @click="likeHandler">
+                    <ion-icon
+                        name="heart"
+                        v-if="videoInfo.likeStatus == 0"
+                    ></ion-icon>
+                    <ion-icon
+                        name="heart"
+                        v-else="videoInfo.likeStatus == 1"
+                        style="color: red"
+                    ></ion-icon>
+
                     <div class="num">{{ videoInfo.like_count }}</div>
                 </div>
                 <div class="icon" @click="commentHandle">
                     <ion-icon name="chatbubble-ellipses"></ion-icon>
                     <div class="num">{{ videoInfo.comment_count }}</div>
                 </div>
-                <div class="icon">
+                <div class="icon" @click="collection">
                     <ion-icon
                         name="star"
                         v-if="videoInfo.collectionStatus == 0"
@@ -155,14 +237,23 @@ const likeHandler = async () => {
                 </div>
             </div>
 
-            <div class="message">
+            <!-- 用户信息 -->
+            <div
+                class="message"
+                :class="{ 'message-has-suggest': videoInfo.suggest_words }"
+            >
                 <div class="nickname">@{{ videoInfo.nickname }}</div>
                 <div class="description">
                     {{ videoInfo.description }}
                 </div>
             </div>
 
-            <div class="related" v-if="false" style="height: 28px">
+            <!-- 相关搜索 -->
+            <div
+                class="related"
+                v-if="videoInfo.suggest_words"
+                style="height: 28px"
+            >
                 <div class="title-box">
                     <ion-icon name="search-outline"></ion-icon>
                     <div class="title">{{ videoInfo.suggest_words }}</div>
@@ -172,11 +263,15 @@ const likeHandler = async () => {
                 </div>
             </div>
 
+            <!-- 进度条 -->
             <div class="progress"></div>
         </div>
 
         <!-- 评论 -->
         <Comment class="comment" :videoId="videoInfo.video_id"></Comment>
+
+        <!-- 提示 -->
+        <div v-if="isShowTipContent" class="tip-content">{{ tipContent }}</div>
     </div>
 </template>
 
@@ -194,6 +289,7 @@ const likeHandler = async () => {
     background-color: #000000;
 
     .video {
+        z-index: 1;
         position: absolute;
         top: 0;
         bottom: 58px;
@@ -206,6 +302,19 @@ const likeHandler = async () => {
         bottom: 58px;
         width: 100%;
         // height: 200px;
+    }
+
+    // tip
+    .tip-content {
+        z-index: 999;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        background-color: var(--tip-bg);
+        padding: 5px 10px;
+        border-radius: var(--rounded);
     }
 }
 
@@ -227,7 +336,7 @@ const likeHandler = async () => {
         color: white;
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 16px;
         justify-content: center;
         align-items: center;
         margin-right: 10px;
@@ -272,11 +381,12 @@ const likeHandler = async () => {
     .message {
         z-index: 16;
         position: fixed;
-        bottom: calc(58px + 28px);
+        bottom: 58px;
         left: 0;
         right: 0;
         height: auto;
         padding: 0 12px;
+        padding-right: 80px;
         .nickname {
             font-size: 16px;
             font-weight: 600;
@@ -285,6 +395,10 @@ const likeHandler = async () => {
         .description {
             padding-block: 10px;
         }
+    }
+
+    .message-has-suggest {
+        bottom: calc(58px + 28px);
     }
 
     .related {

@@ -9,6 +9,15 @@ const loginApi = (params?: any, data?: any) => {
     });
 };
 
+const registerApi = (params?: any, data?: any) => {
+    return request({
+        url: "/v0/auth/register",
+        method: "post",
+        params,
+        data,
+    });
+};
+
 const getUserInfoApi = (params?: any, data?: any) => {
     return request({
         url: "/v1/user/getUserInfo",
@@ -31,4 +40,5 @@ export default {
     getUserInfoApi,
     updateUserInfoApi,
     loginApi,
+    registerApi,
 };

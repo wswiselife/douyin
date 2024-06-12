@@ -23,15 +23,12 @@ const videoFile = (e: Event) => {
         // let videoBase64File = reader.readAsDataURL(uploadFile);
 
         reader.onload = e => {
-            // console.log("e-result", e.target.result);
             // 存储视频/图片
-
             piniaStore.setVideoBase64File(e.target.result);
         };
 
         // 存储文件形式的file
-        piniaStore.setUploadedFile(uploadFile);
-
+        // 如果选择的是视频，则存起来，改成在调用的地方实现-2024-06-11
         // console.log("videoBase64File.length", piniaStore.videoBase64File);
         // 传递父组件--这里需要一直传递数据，不方便
         emit("videoFile", uploadFile);
